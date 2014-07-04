@@ -8,40 +8,29 @@ public class mno {
 			System.out.println("NIE");
 	}
 	public static boolean checkArray(int [] a){
-		boolean descending1 = false;
-		boolean descending2 = false;
-		for (int i=0; i<a.length-1; i++){
-			int x = i+1;
-			int j = a[x];
-			while (x != i){
-				if (j<a[i]) {
-					descending1 = true;
+		int n = a.length;
+		int next_index = 0;
+		for (int i=0; i<n; ++i)
+			if (i==0 || a[i-1] != a[i])
+				a[next_index++]=a[i];
+		if (a[next_index-1] == a[0]) next_index--;
+		n = next_index;
+		int start_point = 0;
+		for (int i = 0; i < n; ++i)
+			if (a[i] < a[start_point]) start_point = i;
+		int [] deltas = new int[] {-1,1};
+		for (int delta : deltas) {
+			boolean property = true;
+			for(int i = 0; i<n-1; ++i) {
+				int current = (start_point + delta*i + n)%n;
+				int next = (start_point + delta*(i+1) + n)%n;
+				if (!(a[current]<=a[next])) {
+					property = false;
+					break;
 				}
-				else descending1 = false;
-				if (x==a.length-1){
-					x=0;
-				}
-				else
-					x++;
 			}
+			if (property) return true;
 		}
-		for (int i=a.length-1; i>0; i--){
-			int x = i-1;
-			int j = a[x];
-			while (x != i){
-				if (j<a[i]) {
-					descending2 = true;
-				}
-				else descending2 = false;
-				if (x==0){
-					x=a.length-1;
-				}
-				else
-					x--;
-			}
-		}
-		if (descending1 || descending2)
-			return true;
 		return false;
 	}
 	public static int[] getArray(){
